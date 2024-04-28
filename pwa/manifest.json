@@ -1,0 +1,22 @@
+{
+    "short_name": "nijimemo",
+    "name": "nijimemo",
+    "theme_color": "#9cd9ce",
+    "background_color": "#9cd9ce",
+    "display": "standalone",
+    "start_url": "../index.html",
+    "icons": [
+        {
+            "src": "../img/logo/nijimemo_back_icon.png",
+            "sizes": "720x720",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "../img/logo/nijimemo_back_icon.png",
+            "sizes": "720x720",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

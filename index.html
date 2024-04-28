@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head prefix="og: https://ogp.me/ns#">
+        <meta property="og:url" content="https://nijimemo.daichimarukana.com"/>
+        <meta property="og:type" content=""/>
+        <meta property="og:title" content="nijimemo"/>
+        <meta property="og:description" content="nijimemoは手軽なブラウザメモです！nijimemoを使って簡単にブラウザメモをしましょう！"/>
+        <meta property="og:site_name" content="nijimemo"/>
+        <meta property="og:image" content="https://nijimemo.daichimarukana.com/img/title.png"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:creator" content="@daichimarukana"/>
+
+        <meta charset="utf-8">
+        <title>nijimemo | 手軽なブラウザメモ</title>
+        <script src="js/seedrandom.min.js"></script>
+        <script src="js/qrcode.min.js"></script>
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/url-comp.js"></script>
+        <script src="js/crypto-js.js"></script>
+        <script src="js/jsQR.js"></script>
+        <script src="js/main.js"></script>
+        <link rel="stylesheet" href="style/style.css" type="text/css">
+        <link rel="icon" href="img/favicon.ico" id="favicon">
+        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+        <link rel="manifest" href="pwa/manifest.json">
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker OK');
+                }).catch(err => {
+                    console.log('ServiceWorker BAD');
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <header>
+            <a href="index.html"><img id="logo" src="img/logo/color_logo.png"></a>
+            <script>
+            if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                $("#logo").attr('src', 'img/logo/dark_logo.png');
+            }
+            </script>
+        </header>
+        <main>
+            <div class="err" style="display:none;"></div>
+
+            <div class="sidebar">
+                <a href="#" class="btn_col">メモ</a>
+                <a href="reception.html">受信</a>
+                <div class="btm_zone">
+                    <a href="rule/terms.html">利用規約</a>
+                    <a href="rule/privacypolicy.html">プライバシーポリシー</a>
+                    <a href="rule/license.html">ライセンス</a>
+                </div>
+            </div>
+            <div class="rightbox">
+                <h1>メモを書く</h1>
+                <div class="write">
+                    <div>
+                        <div class="p2">タイトル</div>
+                        <input id="title"></input>
+                        <div class="p2">本文</div>
+                        <textarea id="textarea"></textarea>
+                        <button id="save">Save</button>
+                    </div>
+                </div>
+                
+
+                <h1>すべてのメモ</h1>
+                <div class="read_zone">
+
+                </div>
+
+                
+            </div>
+        </main>
+        <div class="modal" style="display: none;">
+            <div class="window">
+                <div class="inner">
+                    <div class="p2">タイトル</div>
+                    <input id="overwrite_title"></input>
+                    <div class="p2">本文</div>
+                    <textarea id="overwrite_textarea"></textarea>
+                    <div class="flexbox">
+                        <button id="close">Close</button>
+                        <button id="delete" class="del">Delete</button>
+                        <button id="share">Share</button>
+                        <button id="overwrite">Save</button> 
+                    </div>
+                </div>
+            </div>
+            <div class="qr_window">
+                <div class="inner">
+                    <div class="qrcode" id="qrcode"></div>
+                    <div class="flexbox">
+                        <button id="cancel">Cancel</button>
+                        <button id="next">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var readerr = nijimemo_read();
+        if(!(readerr === 0)){
+            $(".err").html(readerr);
+            $(".err").show();
+            window.setTimeout(function(){
+                $(".err").hide();
+            }, 5000);
+        }
+
+        $('#save').off('click'); 
+        $("#save").on('click', function() {
+            nijimemo_save($("#title").val(),$("#textarea").val());
+            $("#title").val("");
+            $("#textarea").val("");
+        });
+
+        $('.read_zone').off('click'); 
+        $('.read_zone').on('click','.memo',function(){
+            var memo_number = $(this).attr('id');
+
+            var modal = $('.modal');
+
+            $(".window").addClass("slideUp");
+            $(".window").removeClass("slideDown");
+            $(".window").show();
+            modal.show();
+
+            $(".qr_window").hide();
+
+            modal.children(".window").children(".inner").children("input").val(nijimemo_get_memo(memo_number,"title"));
+            modal.children(".window").children(".inner").children("textarea").val(nijimemo_get_memo(memo_number,"text"));
+
+            $('#overwrite').off('click'); 
+            $("#overwrite").on('click', function() {
+                var overwrite = nijimemo_overwrite_save(memo_number,$("#overwrite_title").val(),$("#overwrite_textarea").val());
+                if(overwrite === 0){
+                    $(".window").addClass("slideDown");
+                    $(".window").removeClass("slideUp");
+                    window.setTimeout(function(){
+                        modal.hide();
+                    }, 150);
+                }else{
+                    $(".err").html(overwrite);
+                    $(".err").show();
+                    window.setTimeout(function(){
+                        $(".err").hide();
+                    }, 5000);
+                }
+            });
+
+            $('#delete').off('click'); 
+            $("#delete").on('click', function() {
+                var nijimemo_delete = nijimemo_delete_memo(memo_number);
+                if(nijimemo_delete === 0){
+                    $(".window").addClass("slideDown");
+                    $(".window").removeClass("slideUp");
+                    window.setTimeout(function(){
+                        modal.hide();
+                    }, 150);
+                }else{
+                    $(".err").html(overwrite);
+                    $(".err").show();
+                    window.setTimeout(function(){
+                        $(".err").hide();
+                    }, 5000);
+                }
+            });
+
+            $('#share').off('click'); 
+            $("#share").on('click', function() {
+                $(".qr_window").addClass("slideUp");
+                $(".qr_window").removeClass("slideDown");
+
+                $(".window").addClass("slideDown");
+                $(".window").removeClass("slideUp");
+                window.setTimeout(function(){
+                    $(".window").hide();
+                }, 150);
+
+                $(".qr_window").show();
+                nijimemo_share($("#overwrite_textarea").val());
+
+                $('#next').off('click'); 
+                $("#next").on('click', function() {
+                    var next_qr = nijimemo_share();
+                    if(next_qr == 0){
+                        $('#qrcode').children().remove();
+
+                        $(".window").addClass("slideUp");
+                        $(".window").removeClass("slideDown");
+                        $(".qr_window").addClass("slideDown");
+                        $(".qr_window").removeClass("slideUp");
+                        
+                        $(".window").show();
+                        window.setTimeout(function(){
+                            $(".qr_window").hide();
+                        }, 150);
+                    }
+                });
+
+                $('#cancel').off('click'); 
+                $("#cancel").on('click', function() {
+                    $('#qrcode').children().remove();
+
+                    $(".window").addClass("slideUp");
+                    $(".window").removeClass("slideDown");
+                    $(".qr_window").addClass("slideDown");
+                    $(".qr_window").removeClass("slideUp");
+
+                    $(".window").show();
+                    window.setTimeout(function(){
+                        $(".qr_window").hide();
+                    }, 150);
+                });
+            });
+
+            $('#close').off('click'); 
+            $("#close").on('click', function() {
+
+                $(".window").addClass("slideDown");
+                $(".window").removeClass("slideUp");
+
+                window.setTimeout(function(){
+                    $(".modal").hide();
+                }, 150);
+            });
+        });
+
+        $('.modal').off('click'); 
+        $(".modal").on('click', function(e) {
+            if(e.target !== e.currentTarget) return;
+            $(".window").addClass("slideDown");
+            $(".window").removeClass("slideUp");
+            $(".qr_window").addClass("slideDown");
+            $(".qr_window").removeClass("slideUp");
+
+            window.setTimeout(function(){
+                $(".modal").hide();
+                $(".qr_window").hide();
+                $(".window").hide();
+            }, 150);
+        });
+</script>
+    
+</html>

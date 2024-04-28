@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>nijimemo | メモの受信</title>
+        <script src="js/seedrandom.min.js"></script>
+        <script src="js/qrcode.min.js"></script>
+        <script src="js/jquery-3.7.1.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/url-comp.js"></script>
+        <script src="js/crypto-js.js"></script>
+        <script src="js/jsQR.js"></script>
+        <script src="js/main.js"></script>
+        <link rel="stylesheet" href="style/style.css" type="text/css">
+        <link rel="icon" href="img/favicon.ico" id="favicon">
+        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+        <link rel="manifest" href="pwa/manifest.json">
+    </head>
+    <body>
+        <header>
+            <a href="index.html"><img id="logo" src="img/logo/color_logo.png"></a>
+            <script>
+                if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                    $("#logo").attr('src', 'img/logo/dark_logo.png');
+                }
+            </script>
+        </header>
+        <main>
+            <div class="err" style="display:none;"></div>
+
+            <div class="sidebar">
+                <a href="index.html">メモ</a>
+                <a href="#" class="btn_col">受信</a>
+                <div class="btm_zone">
+                    <a href="rule/terms.html">利用規約</a>
+                    <a href="rule/privacypolicy.html">プライバシーポリシー</a>
+                    <a href="rule/license.html">ライセンス</a>
+                </div>
+            </div>
+            <div class="rightbox">
+                <h1>メモを受信する</h1>
+
+                <div class="camera">
+                    <img id="color_bar" src="img/color_bar.png">
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+
+                <p id="now_num" class="now_num">0/X</p>
+
+                <div class="start_read">
+                    <button id="read">Read</button>
+                </div>
+                
+            </div>
+        </main>
+        <div class="modal" style="display: none;">
+            <div class="window">
+                <div class="inner">
+                    <div class="p2">本文</div>
+                    <textarea id="textarea"></textarea>
+                    <div class="flexbox">
+                        <button id="cancel">Cancel</button>
+                        <button id="save">Save</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var read = false;
+        $('#read').off('click'); 
+        $("#read").on('click', function() {
+            if(read == false){
+                $("#read").addClass("rec");
+                $("#read").html("Reading now");
+                read = true;
+            }else{
+                $("#read").removeClass("rec");
+                $("#read").html("Read");
+                read = false;
+            }
+            nijimemo_qr_read();
+        });
+    </script>
+</html>
