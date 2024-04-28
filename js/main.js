@@ -278,7 +278,7 @@ function nijimemo_save(title,text){
         title = "無題";
     }
 
-    $('.read_zone').prepend('<div class="memo" id="'+id+'"><h1>'+EscHtml(title)+'</h1><p>'+EscHtml(text.replace(/\r?\n/g, '<br>'))+'</p><div class="p2">'+now+'</div></div>');
+    $('.read_zone').prepend('<div class="memo" id="'+id+'"><h1>'+EscHtml(title)+'</h1><p>'+EscHtml(text).replace(/\r?\n/g, '<br>')+'</p><div class="p2">'+now+'</div></div>');
 }
 
 function nijimemo_read(){
@@ -328,7 +328,7 @@ function nijimemo_read(){
             if (json_memo.text == '') {
                 json_memo.text = "";
             }
-            $('.read_zone').append('<div class="memo" id="' + json_memo.id + '"><h1>' + EscHtml(json_memo.title) + '</h1><p>' + EscHtml(json_memo.text.replace(/\r?\n/g, '<br>')) + '</p><div class="p2">' + json_memo.date + '</div></div>');
+            $('.read_zone').append('<div class="memo" id="' + json_memo.id + '"><h1>' + EscHtml(json_memo.title) + '</h1><p>' + EscHtml(json_memo.text).replace(/\r?\n/g, '<br>') + '</p><div class="p2">' + json_memo.date + '</div></div>');
         } else {
             $('.read_zone').append('<div class="error">鍵かメモのデータが破損しています。</div>');
             return "鍵かメモのデータが破損しています。";
@@ -445,7 +445,7 @@ function nijimemo_overwrite_save(id,title,text){
     var json = JSON.stringify(get_data);
     window.localStorage.setItem("memo", json);
 
-    $('.read_zone').children('#'+id).html('<h1>' + EscHtml(title) + '</h1><p>' + EscHtml(text.replace(/\r?\n/g, '<br>')) + '</p><div class="p2">' + now + '</div>');
+    $('.read_zone').children('#'+id).html('<h1>' + EscHtml(title) + '</h1><p>' + EscHtml(text).replace(/\r?\n/g, '<br>') + '</p><div class="p2">' + now + '</div>');
 
     return 0;
 }
