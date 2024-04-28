@@ -889,4 +889,7 @@ main{
     .terms p{
         color: #EEE;
     }
+    .error{
+        color: #EEE;
+    }
 }
