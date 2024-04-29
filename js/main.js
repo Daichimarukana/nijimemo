@@ -6,6 +6,11 @@ function EscHtml(string){
     .replace(/'/g, "&#x27;");
 }
 
+function getTextByte(text) {
+    var blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+    return blob.size;
+}
+
 function gen_OneTimeText() {
     var currentTime = new Date();
     var minute = currentTime.getMinutes();
