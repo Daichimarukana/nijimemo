@@ -3,6 +3,7 @@ const urlsToCache = [
   '',
   'index.html',
   'reception.html',
+  'storage.html',
   'js/crypto-js.js',
   'js/jquery-3.7.1.min.js',
   'js/jsQR.js',

@@ -2,7 +2,7 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>nijimemo | メモの受信</title>
+        <title>nijimemo | 残り空き容量</title>
         <script src="js/seedrandom.min.js"></script>
         <script src="js/qrcode.min.js"></script>
         <script src="js/jquery-3.7.1.min.js"></script>
@@ -30,8 +30,8 @@
 
             <div class="sidebar">
                 <a href="index.html">メモ</a>
-                <a href="#" class="btn_col">受信</a>
-                <a href="storage.html">容量</a>
+                <a href="reception.html">受信</a>
+                <a href="#" class="btn_col">容量</a>
                 <div class="btm_zone">
                     <a href="rule/terms.html">利用規約</a>
                     <a href="rule/privacypolicy.html">プライバシーポリシー</a>
@@ -39,48 +39,31 @@
                 </div>
             </div>
             <div class="rightbox">
-                <h1>メモを受信する</h1>
-
-                <div class="camera">
-                    <img id="color_bar" src="img/color_bar.png">
-                    <canvas id="canvas" style="display: none;"></canvas>
-                </div>
-
-                <p id="now_num" class="now_num">0/X</p>
-
-                <div class="start_read">
-                    <button id="read">Read</button>
-                </div>
-                
-            </div>
-        </main>
-        <div class="modal" style="display: none;">
-            <div class="window">
-                <div class="inner">
-                    <div class="p2">本文</div>
-                    <textarea id="textarea"></textarea>
-                    <div class="flexbox">
-                        <button id="cancel">Cancel</button>
-                        <button id="save">Save</button> 
+                <h1>残り空き容量</h1>
+                <p>残り空き容量です。<br>
+                    大きいデータを保存すると動作が遅くなる原因になります。</p>
+                <p class="storage_text"></p>
+                <p id="mb"></p>
+                <div class="storage">
+                    <div class="storage_bar">
+                        <div class="bar"></div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </body>
     <script>
-        var read = false;
-        $('#read').off('click'); 
-        $("#read").on('click', function() {
-            if(read == false){
-                $("#read").addClass("rec");
-                $("#read").html("Reading now");
-                read = true;
-            }else{
-                $("#read").removeClass("rec");
-                $("#read").html("Read");
-                read = false;
-            }
-            nijimemo_qr_read();
-        });
+        var storage = null;
+        if(localStorage.hasOwnProperty("memo")){
+            storage = getTextByte(window.localStorage.getItem("memo"));
+        }else{
+            storage = 0;
+        }
+        var persent = (storage / 5242880) * 100;
+        
+        $(".bar").css("width",""+String(Math.round(persent))+"%");
+        $(".storage_text").html(String(Math.round(persent))+"<span>%</span> <span class='one'>/ 100%</span>");
+
+        $("#mb").html((storage / 1024 / 1024).toFixed(2)+"MB/"+(5242880 / 1024 / 1024).toFixed(2)+"MB")
     </script>
 </html>

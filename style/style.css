@@ -103,6 +103,14 @@ main{
 .rightbox h1{
     font-size: 24px;
     color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
+
+.rightbox p{
+    line-height: 20px;
+    font-size: 16px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
 }
 .rightbox .write{
     width: calc(50% - 12px);
@@ -214,7 +222,43 @@ main{
     color: #252525;
     font-family: "Inter", sans-serif;
 }
-
+.rightbox .storage{
+    width: 50%;
+    height: fit-content;
+}
+.rightbox .storage .storage_bar{
+    padding: 4px;
+    width: 100%;
+    height: 24px;
+    background-color: #FFFFFF;
+    border-radius: 25px;
+    border: solid 1px #DDD;
+}
+.rightbox .storage .storage_bar .bar{
+    width: 0%;
+    height: 24px;
+    background-color: #2bc8b1;
+    border-radius: 25px;
+}
+.rightbox .storage_text{
+    margin: 0px;
+    line-height: 64px;
+    font-size: 48px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
+.rightbox .storage_text span{
+    margin: 0px;
+    font-size: 32px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
+.rightbox .storage_text .one{
+    margin: 0px;
+    font-size: 24px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
 
 
 .modal{
@@ -529,7 +573,8 @@ main{
         min-width: auto;
         width: 100%;
         border-top: solid 1px #DDD;
-        border-right: none;
+        padding-right: 0px;
+        padding-left: 0px;
         padding-top: 0px;
         height: fit-content;
         display: flex;
@@ -540,10 +585,10 @@ main{
         margin-bottom: 24px;
         margin-right: auto;
         margin-left: auto;
-        padding-left: none;
+        padding-left: 0px;
         border-radius: 64px;
         display: block;
-        width: calc((100% / 2) - 48px);
+        width: calc((100% / 3) - 48px);
         height: 104px;
 
         text-align: center;
@@ -567,6 +612,10 @@ main{
         
     .rightbox h1{
         font-size: 48px;
+    }
+    .rightbox p{
+        line-height: 40px;
+        font-size: 32px;
     }
     .rightbox .write{
         width: 100%;
@@ -621,10 +670,36 @@ main{
     }
     .rightbox .read_zone .memo p{
         font-size: 32px;
+        line-height: 38px;
     }
     .rightbox .read_zone .memo .p2{
         bottom: 32px;
         font-size: 24px;
+    }
+
+    .rightbox .storage{
+        width: 100%;
+    }
+    .rightbox .storage .storage_bar{
+        padding: 8px;
+        width: calc(100% - 16px);
+        height: 48px;
+        border-radius: 48px;
+    }
+    .rightbox .storage .storage_bar .bar{
+        width: 0%;
+        height: 48px;
+        border-radius: 48px;
+    }
+    .rightbox .storage_text{
+        line-height: 132px;
+        font-size: 128px;
+    }
+    .rightbox .storage_text span{
+        font-size: 64px;
+    }
+    .rightbox .storage_text .one{
+        font-size: 48px;
     }
 
 
@@ -803,6 +878,9 @@ main{
     .rightbox h1{
         color: #EEE;
     }
+    .rightbox p{
+        color: #EEE;
+    }
     .rightbox .write{
         background-color: #101010;
         border: solid 1px #252525;
@@ -841,6 +919,21 @@ main{
     .rightbox .read_zone .memo .p2{
         color: #EEE;
     }
+    
+    .rightbox .storage .storage_bar{
+        background-color: #101010;
+        border: solid 1px #252525;
+    }
+    .rightbox .storage_text{
+        color: #EEE;
+    }
+    .rightbox .storage_text span{
+        color: #EEE;
+    }
+    .rightbox .storage_text .one{
+        color: #EEE;
+    }
+
 
     .modal .window{
         background-color: #101010;
