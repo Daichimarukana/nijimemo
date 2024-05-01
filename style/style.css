@@ -541,28 +541,28 @@ main{
 
 @media screen and (max-width: 1080px) {
     header{
-        top: 48px;
-        left: 48px;
+        top: 32px;
+        left: 32px;
         position: fixed;
         margin-right: auto;
         margin-left: auto;
-        width: calc(100dvw - 96px);
-        border-radius: 64px;
-        box-shadow: 0px 16px 64px rgba(0, 0, 0, 0.05);
+        width: calc(100dvw - 64px);
+        border-radius: 24px;
+        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.05);
         border: solid 1px #FFFFFF;
-        height: 128px;
+        height: 48px;
         z-index: 9999;
         text-align: center;
     }
     header img{
         margin-left: auto;
         margin-right: auto;
-        height: 128px;
+        height: 48px;
         object-fit: inherit;
     }
 
     main{
-        margin-top: 128px;
+        margin-top: 0px;
         display: block;
     }
     
@@ -581,20 +581,20 @@ main{
         justify-content: space-between;
     }
     .sidebar a{
-        margin-top: 24px;
-        margin-bottom: 24px;
+        margin-top: 8px;
+        margin-bottom: 8px;
         margin-right: auto;
         margin-left: auto;
         padding-left: 0px;
-        border-radius: 64px;
+        border-radius: 24px;
         display: block;
-        width: calc((100% / 3) - 48px);
-        height: 104px;
+        width: calc((100% / 3) - 16px);
+        height: 48px;
 
         text-align: center;
 
-        line-height: 104px;
-        font-size: 48px;
+        line-height: 48px;
+        font-size: 20px;
     }
     .sidebar .btm_zone{
         display: none;
@@ -606,75 +606,78 @@ main{
         margin-left: 32px;
         margin-right: 32px;
         padding-top: 100px;
-        padding-bottom: 256px;
+        padding-bottom: 128px;
+        overflow: hidden;
     }
 
         
     .rightbox h1{
-        font-size: 48px;
+        font-size: 32px;
     }
     .rightbox p{
-        line-height: 40px;
-        font-size: 32px;
+        line-height: 20px;
+        font-size: 16px;
     }
     .rightbox .write{
-        width: 100%;
+        width: calc(100% - 2px);
         height: fit-content;
-        border-radius: 30px;
+        border-radius: 20px;
     }
     .rightbox .write div{
-        margin: 32px;
+        margin: 16px;
     }
     .rightbox .write div input{
-        border-radius: 20px;
+        border-radius: 10px;
         width: calc(100% - 12px);
-        height: 64px;
-        font-size: 48px;
+        height: 48px;
+        font-size: 24px;
     }
     .rightbox .write div textarea{
-        border-radius: 20px;
+        border-radius: 10px;
         width: calc(100% - 12px);
-        height: 64px;
-        font-size: 24px;
-        height: 320px;
+        height: 128px;
+        font-size: 16px;
     }
     .rightbox .write div .p2{
-        margin-top: 32px;
-        margin-bottom: 24px;
-        font-size: 24px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        font-size: 16px;
     }
     .rightbox .write div button{
-        margin-top: 32px;
-        font-size: 32px;
-        height: 82px;
-        width: 256px;
-        border-radius: 20px;
+        margin-top: 16px;
+        font-size: 20px;
+        height: 48px;
+        width: 128px;
+        border-radius: 10px;
     }
 
 
 
     .rightbox .read_zone{
-        justify-content:space-between;
+        display: block;
     }
     .rightbox .read_zone .memo{
         margin-left: 0px;
         margin-right: 0px;
-        width: calc((100% / 2) - 84px);
+        width: calc(100% - 34px);
         height: fit-content;
-        padding: 32px;
-        border-radius: 30px;
-        margin-top: 32px;
+        padding: 16px;
+        border-radius: 20px;
+        margin-top: 16px;
     }
     .rightbox .read_zone .memo h1{
-        font-size: 48px;
+        font-size: 24px;
+        font-weight: bold;
     }
     .rightbox .read_zone .memo p{
-        font-size: 32px;
-        line-height: 38px;
+        margin-top: 8px;
+        margin-bottom: 24px;
+        font-size: 16px;
+        line-height: 20px;
     }
     .rightbox .read_zone .memo .p2{
-        bottom: 32px;
-        font-size: 24px;
+        bottom: 16px;
+        font-size: 12px;
     }
 
     .rightbox .storage{
@@ -682,34 +685,34 @@ main{
     }
     .rightbox .storage .storage_bar{
         padding: 8px;
-        width: calc(100% - 16px);
-        height: 48px;
-        border-radius: 48px;
+        width: calc(100% - 18px);
+        height: 32px;
+        border-radius: 32px;
     }
     .rightbox .storage .storage_bar .bar{
         width: 0%;
-        height: 48px;
-        border-radius: 48px;
+        height: 32px;
+        border-radius: 32px;
     }
     .rightbox .storage_text{
-        line-height: 132px;
-        font-size: 128px;
-    }
-    .rightbox .storage_text span{
+        line-height: 70px;
         font-size: 64px;
     }
-    .rightbox .storage_text .one{
+    .rightbox .storage_text span{
         font-size: 48px;
+    }
+    .rightbox .storage_text .one{
+        font-size: 32px;
     }
 
 
     .modal .window{
         padding: 0px;
-        border-radius: 30px 30px 0px 0px;
+        border-radius: 20px 20px 0px 0px;
         width: 100%;
-        height: 65dvh;
+        height:75dvh;
         max-width: 100%;
-        top: 35%;
+        top: 25dvh;
         right: 0;
         bottom: 0%;
         left: 0;
@@ -717,33 +720,32 @@ main{
     }
     .modal .window .inner{
         margin: 32px;
-        height: calc(65dvh - 64px);
+        height: calc(75dvh - 64px);
     }
     .modal .window .inner input{
-        border-radius: 20px;
+        border-radius: 10px;
         width: calc(100% - 12px);
-        height: 64px;
-        font-size: 48px;
+        height: 48px;
+        font-size: 24px;
     }
     .modal .window .inner textarea{
-        border-radius: 20px;
+        border-radius: 10px;
         width: calc(100% - 12px);
-        height: 64px;
-        font-size: 24px;
-        height: 76%;
+        height: 50%;
+        font-size: 16px;
     }
     .modal .window .inner .p2{
-        margin-top: 32px;
-        margin-bottom: 24px;
-        font-size: 24px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        font-size: 16px;
     }
     .modal button{
         margin: 0px;
-        margin-top: 32px;
-        font-size: 32px;
-        height: 82px;
-        width: calc((100% / 4) - 16px);
-        border-radius: 20px;
+        margin-top: 16px;
+        font-size: 16px;
+        height: 48px;
+        width: calc((100% / 4) - 8px);
+        border-radius: 10px;
     }
 
     .modal .window .inner .flexbox{
@@ -790,27 +792,27 @@ main{
     .modal .qr_window .inner .flexbox button{
         margin: 0px;
         margin-top: 32px;
-        font-size: 32px;
-        height: 82px;
-        width: calc((100% / 2) - 16px);
-        border-radius: 20px;
+        font-size: 16px;
+        height: 48px;
+        width: calc((100% / 2) - 8px);
+        border-radius: 10px;
     }
 
     .camera img{
         width: 100%;
         height: 35dvh;
         object-fit: cover;
-        border-radius: 30px;
+        border-radius: 20px;
     }
     .camera canvas{
         width: 100%;
         height: 35dvh;
         object-fit: cover;
-        border-radius: 30px;
+        border-radius: 20px;
     }
 
-    .now_num{
-        font-size: 64px;
+    .rightbox .now_num{
+        font-size: 32px !important;
     }
 
     .start_read button{
@@ -819,10 +821,10 @@ main{
         margin-right: auto;
         margin-top: 12px;
         margin-bottom: 6px;
-        font-size: 48px;
-        height: 100px;
-        width: 350px;
-        border-radius: 20px;
+        font-size: 24px;
+        height: 64px;
+        width: 180px;
+        border-radius: 15px;
     }
 
     .terms{
@@ -832,20 +834,17 @@ main{
         margin-right: 32px;
     }
     .terms h1{
-        font-size: 82px;
+        font-size: 32px;
     }
     .terms h2{
-        font-size: 64px;
+        font-size: 24px;
     }
     .terms p{
-        font-size: 32px;
-    }
-    .terms p{
-        font-size: 32px;
+        font-size: 16px;
     }
     .terms a{
         margin: 0px;
-        font-size: 32px;
+        font-size: 16px;
     }
 }
 @media (prefers-color-scheme: dark) {
