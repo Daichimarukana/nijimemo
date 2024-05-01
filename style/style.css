@@ -525,6 +525,11 @@ main{
     color: #252525;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
 }
+.terms h3{
+    font-size: 24px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
 .terms p{
     font-size: 16px;
     color: #252525;
@@ -839,6 +844,9 @@ main{
     .terms h2{
         font-size: 24px;
     }
+    .terms h3{
+        font-size: 20px;
+    }
     .terms p{
         font-size: 16px;
     }
@@ -976,6 +984,9 @@ main{
         color: #EEE;
     }
     .terms h2{
+        color: #EEE;
+    }
+    .terms h3{
         color: #EEE;
     }
     .terms p{
