@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>nijimemo | 404 Not Found</title>
+        <script src="../js/jquery-3.7.1.min.js"></script>
+        <link rel="stylesheet" href="../style/style.css" type="text/css">
+        <link rel="icon" href="../img/favicon.ico" id="favicon">
+        <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+    </head>
+    <body>
+        <header>
+            <a href="../index.html"><img id="logo" src="../img/logo/color_logo.png"></a>
+            <script>
+                if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                    $("#logo").attr('src', '../img/logo/dark_logo.png');
+                }
+            </script>
+        </header>
+        <main>
+            <div class="terms">
+                <h1>404 Not Found</h1>
+                <h2>なにかお探しですか？</h2>
+                <p>お探しのページはないようです。<br>
+                    <br>
+                    もし、メモをお探しでしたら<a href="index.html">トップページ</a>よりお探しくださいね、<br>
+                    「メモがありません」や「メモの鍵がみつかりません」、と表示されているのならば、残念ですがあなたのメモはきっともう見ることはできないでしょう。</p>
+            </div>
+        </main>
+    </body>
+</html>
