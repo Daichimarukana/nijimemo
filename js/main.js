@@ -271,7 +271,8 @@ function nijimemo_save(title,text){
         "id": id,
         "date": now,
         "title": encrypt_title,
-        "text": encrypt_text
+        "text": encrypt_text,
+        "lock": false
     };
     
     get_data.Data.push(newData);
@@ -324,7 +325,8 @@ function nijimemo_read(){
                 id: memo.id,
                 title: URLCompressor.expand(decrypt_title),
                 text: URLCompressor.expand(decrypt_text),
-                date: memo.date
+                date: memo.date,
+                lock: memo.lock
             };
             all_memo_json.push(de_comp_data);
         }
@@ -332,17 +334,21 @@ function nijimemo_read(){
 
     for (var json_memo of all_memo_json.reverse()) {
         if (json_memo) {
-            if (json_memo.title == '') {
-                json_memo.title = "無題";
+            if(json_memo.lock == false || json_memo.lock == null){
+                if (json_memo.title == '') {
+                    json_memo.title = "無題";
+                }
+                if (json_memo.text == '') {
+                    json_memo.text = "";
+                }
+                var main_Text = EscHtml(json_memo.text).replace(/\r?\n/g, '<br>');
+                if(main_Text.length > 256){
+                    main_Text = main_Text.substring(0, 256) + "…";
+                }
+                $('.read_zone').append('<div class="memo" id="' + json_memo.id + '"><h1>' + EscHtml(json_memo.title) + '</h1><p>' + main_Text + '</p><div class="p2">' + json_memo.date + '</div></div>');    
+            }else{
+                $('.read_zone').append('<div class="memo" id="' + json_memo.id + '"><h1>' + EscHtml(json_memo.title) + '</h1><p>メモはロックされています。</p><div class="p2">' + json_memo.date + '</div></div>');    
             }
-            if (json_memo.text == '') {
-                json_memo.text = "";
-            }
-            var main_Text = EscHtml(json_memo.text).replace(/\r?\n/g, '<br>');
-            if(main_Text.length > 256){
-                main_Text = main_Text.substring(0, 256) + "…";
-            }
-            $('.read_zone').append('<div class="memo" id="' + json_memo.id + '"><h1>' + EscHtml(json_memo.title) + '</h1><p>' + main_Text + '</p><div class="p2">' + json_memo.date + '</div></div>');
         } else {
             $('.read_zone').append('<div class="error">鍵かメモのデータが破損しています。</div>');
             return "鍵かメモのデータが破損しています。";
@@ -388,7 +394,8 @@ function nijimemo_get_memo(ids,val){
                     id: memo.id,
                     title: URLCompressor.expand(decrypt_title),
                     text: URLCompressor.expand(decrypt_text),
-                    date: memo.date
+                    date: memo.date,
+                    lock: memo.lock
                 };
 
                 if (val == "title") {
@@ -397,6 +404,8 @@ function nijimemo_get_memo(ids,val){
                     return de_comp_data.text || "";
                 } else if (val == "date") {
                     return de_comp_data.date || "";
+                } else if (val == "lock") {
+                    return de_comp_data.lock || "";
                 } else {
                     return 0;
                 }
@@ -448,6 +457,7 @@ function nijimemo_overwrite_save(id,title,text){
             get_data.Data[i].title = encrypt_title;
             get_data.Data[i].text = encrypt_text;
             get_data.Data[i].date = now;
+            get_data.Data[i].lock = false;
             memochk = true;
             break;
         }
@@ -464,6 +474,69 @@ function nijimemo_overwrite_save(id,title,text){
         main_Text = main_Text.substring(0, 256) + "…";
     }
     $('.read_zone').children('#'+id).html('<h1>' + EscHtml(title) + '</h1><p>' + main_Text + '</p><div class="p2">' + now + '</div>');
+
+    return 0;
+}
+
+function nijimemo_memolock(id,title,text,password){
+    if(String(password).length == 0){
+        return "password_mijikai";
+    }
+    
+    var key = $.cookie('nijimemo_key');
+    if(key == null || key == ''){
+        return 'メモの鍵が見つかりません。';
+    }else{
+        $.cookie(
+            'nijimemo_key',
+            key,
+            {
+                expires: 365, 
+                path: '/',
+                samesite: 'Strict',
+                priority: 'High',
+                secure: true
+            }
+        );
+    }
+
+    var date = new Date();
+    var y = date.getFullYear();
+    var m = ('0' + (date.getMonth() + 1)).slice(-2);
+    var d = ('0' + date.getDate()).slice(-2);
+    var h = ('0' + date.getHours()).slice(-2);
+    var min = ('0' + date.getMinutes()).slice(-2);
+    var s = ('0' + date.getSeconds()).slice(-2);
+    var now = y + '/' + m + '/' + d + ' ' + h + ':' + min + ':' + s;
+
+    var get_data = JSON.parse(window.localStorage.getItem("memo"));
+
+    var encrypt_title = CryptoJS.AES.encrypt(URLCompressor.compress(title), key).toString();
+    var encrypt_text = CryptoJS.AES.encrypt(URLCompressor.compress(CryptoJS.AES.encrypt(text, password).toString()), key).toString();
+
+    var memochk = null;
+    for (var i = 0; i < get_data.Data.length; i++) {
+        if (get_data.Data[i].id == id) {
+            get_data.Data[i].title = encrypt_title;
+            get_data.Data[i].text = encrypt_text;
+            get_data.Data[i].date = now;
+            get_data.Data[i].lock = true;
+            memochk = true;
+            break;
+        }
+    }
+    if(!(memochk == true)){
+        return 'メモが見つかりませんでした。';
+    }
+    
+    var json = JSON.stringify(get_data);
+    window.localStorage.setItem("memo", json);
+
+    var main_Text = EscHtml(text).replace(/\r?\n/g, '<br>');
+    if(main_Text.length > 256){
+        main_Text = main_Text.substring(0, 256) + "…";
+    }
+    $('.read_zone').children('#'+id).html('<h1>' + EscHtml(title) + '</h1><p>メモはロックされています。</p><div class="p2">' + now + '</div>');
 
     return 0;
 }

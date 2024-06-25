@@ -20,6 +20,7 @@
         <script src="js/jquery.cookie.js"></script>
         <script src="js/url-comp.js"></script>
         <script src="js/crypto-js.js"></script>
+        <script src="js/zxcvbn.js"></script>
         <script src="js/jsQR.js"></script>
         <script src="js/main.js"></script>
         <link rel="stylesheet" href="style/style.css" type="text/css">
@@ -46,7 +47,9 @@
             </script>
         </header>
         <main>
-            <div class="err" style="display:none;"></div>
+            <div class="errorbox">
+                <div class="err" style="display:none;"></div>
+            </div>
 
             <div class="sidebar">
                 <a href="#" class="btn_col">メモ</a>
@@ -88,10 +91,16 @@
                     <div class="p2">本文</div>
                     <textarea id="overwrite_textarea"></textarea>
                     <div class="flexbox">
-                        <button id="close">Close</button>
-                        <button id="delete" class="del">Delete</button>
-                        <button id="share">Share</button>
-                        <button id="overwrite">Save</button> 
+                        <div class="left">
+                            <button id="memo_lock" class="Icons_button" title="ロック"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"><path d="M226.67-636h380v-90.67q0-52.77-36.92-89.72-36.93-36.94-89.67-36.94-52.75 0-89.75 36.94-37 36.95-37 89.72h-66.66q0-80.33 56.57-136.83Q399.81-920 480.07-920q80.26 0 136.76 56.55 56.5 56.55 56.5 136.78V-636h60q27.5 0 47.09 19.58Q800-596.83 800-569.33v422.66q0 27.5-19.58 47.09Q760.83-80 733.33-80H226.67q-27.5 0-47.09-19.58Q160-119.17 160-146.67v-422.66q0-27.5 19.58-47.09Q199.17-636 226.67-636Zm0 489.33h506.66v-422.66H226.67v422.66ZM480.11-280q32.22 0 55.06-22.52Q558-325.04 558-356.67q0-31-22.95-55.16Q512.11-436 479.89-436t-55.06 24.17Q402-387.67 402-356.33q0 31.33 22.95 53.83 22.94 22.5 55.16 22.5ZM226.67-146.67v-422.66 422.66Z"/></svg></button>
+                        </div>
+                        <div class="right">
+                            <button id="close" title="閉じる">Close</button>
+                            <button id="delete" class="del" title="削除">Delete</button>
+                            <button id="share" title="共有">Share</button>
+                            <button id="overwrite" title="保存">Save</button> 
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -104,6 +113,30 @@
                     </div>
                 </div>
             </div>
+            <div class="lock_window" id="lock_window">
+                <div class="inner">
+                    <h1>メモをロック</h1>
+                    <p>メモをロックすることで、メモを保護することができます。<br>
+                        メモの閲覧時には、パスワードの入力が必要です。</p>
+                    <input type="password" id="set_password" placeholder="pass****">
+                    <div class="flexbox">
+                        <button id="lock_cancel">Cancel</button>
+                        <button id="lock">Lock</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lock_window" id="unlock_window">
+                <div class="inner">
+                    <h1>ロックを解除</h1>
+                    <p>パスワードを入力してください。</p>
+                    <input type="password" id="unlock_password" placeholder="****word">
+                    <div class="flexbox">
+                        <button id="unlock_cancel">Cancel</button>
+                        <button id="unlock">Unlock</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </body>
     <script>
@@ -116,6 +149,27 @@
             }, 5000);
         }
 
+        $('#set_password').on('input', function () {
+		var safetypass = $('#set_password').val();
+		if(String(safetypass).length > 0){
+			$("#password_zxcvbn").show();
+			var point = zxcvbn(safetypass);
+			if(point.score == 0){
+                $("#set_password").css('border-color', '#FF4848');
+			}else if(point.score == 1){
+                $("#set_password").css('border-color', '#ff6a00');
+			}else if(point.score == 2){
+                $("#set_password").css('border-color', '#ffc400');
+			}else if(point.score == 3){
+                $("#set_password").css('border-color', '#99cc00');
+			}else if(point.score == 4){
+                $("#set_password").css('border-color', '#00cc4e');
+			}
+        }else{
+            $("#set_password").css('border-color', '#9cd9ce')
+        }
+	});
+
         $('#save').off('click'); 
         $("#save").on('click', function() {
             nijimemo_save($("#title").val(),$("#textarea").val());
@@ -125,19 +179,96 @@
 
         $('.read_zone').off('click'); 
         $('.read_zone').on('click','.memo',function(){
+
             var memo_number = $(this).attr('id');
 
             var modal = $('.modal');
 
-            $(".window").addClass("slideUp");
-            $(".window").removeClass("slideDown");
-            $(".window").show();
+            //初期化
+            modal.children(".window").children(".inner").children("input").val("");
+            modal.children(".window").children(".inner").children("textarea").val("");
+
             modal.show();
 
+            $(".window").hide();
             $(".qr_window").hide();
+            $("#lock_window").hide();
+            $("#unlock_window").hide();
 
-            modal.children(".window").children(".inner").children("input").val(nijimemo_get_memo(memo_number,"title"));
-            modal.children(".window").children(".inner").children("textarea").val(nijimemo_get_memo(memo_number,"text"));
+            if(nijimemo_get_memo(memo_number,"lock") == true){
+                $("#memo_lock").html('<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"><path d="M226.67-80q-27.5 0-47.09-19.58Q160-119.17 160-146.67v-422.66q0-27.5 19.58-47.09Q199.17-636 226.67-636h60v-90.67q0-80.23 56.57-136.78T480.07-920q80.26 0 136.76 56.55 56.5 56.55 56.5 136.78V-636h60q27.5 0 47.09 19.58Q800-596.83 800-569.33v422.66q0 27.5-19.58 47.09Q760.83-80 733.33-80H226.67Zm0-66.67h506.66v-422.66H226.67v422.66ZM480.11-280q32.22 0 55.06-22.52Q558-325.04 558-356.67q0-31-22.95-55.16Q512.11-436 479.89-436t-55.06 24.17Q402-387.67 402-356.33q0 31.33 22.95 53.83 22.94 22.5 55.16 22.5ZM353.33-636h253.34v-90.67q0-52.77-36.92-89.72-36.93-36.94-89.67-36.94-52.75 0-89.75 36.94-37 36.95-37 89.72V-636ZM226.67-146.67v-422.66 422.66Z"/></svg>');
+
+                $("#unlock_window").addClass("slideUp");
+                $("#unlock_window").removeClass("slideDown");
+
+                $(".window").addClass("slideDown");
+                $(".window").removeClass("slideUp");
+                window.setTimeout(function(){
+                    $(".window").hide();
+                }, 150);
+
+                $("#unlock_window").show();
+
+
+                $('#unlock').off('click'); 
+                $("#unlock").on('click', function() {
+                    var passwd = $('#unlock_password').val();
+                    try {
+                        var enctext = nijimemo_get_memo(memo_number,"text");
+                        var decrypt_text = CryptoJS.AES.decrypt(enctext, passwd).toString(CryptoJS.enc.Utf8);
+
+                        if(decrypt_text == ""){
+                            $(".err").html("パスワードがちがいます。");
+                            $(".err").show();
+                            window.setTimeout(function(){
+                                $(".err").hide();
+                            }, 5000);
+                        }else{
+                            $('#unlock_password').val("");
+                            modal.children(".window").children(".inner").children("input").val(nijimemo_get_memo(memo_number,"title"));
+                            modal.children(".window").children(".inner").children("textarea").val(decrypt_text);
+
+                            $(".window").addClass("slideUp");
+                            $(".window").removeClass("slideDown");
+                            $("#unlock_window").addClass("slideDown");
+                            $("#unlock_window").removeClass("slideUp");
+
+                            $(".window").show();
+                            window.setTimeout(function(){
+                                $("#unlock_window").hide();
+                            }, 150);
+                        }
+
+                    } catch (e) {
+                        $(".err").html("パスワードがちがいます。");
+                        $(".err").show();
+                        window.setTimeout(function(){
+                            $(".err").hide();
+                        }, 5000);
+                    }
+                });
+
+
+                $('#unlock_cancel').off('click'); 
+                $("#unlock_cancel").on('click', function() {
+                    $(".window").addClass("slideUp");
+                    $(".window").removeClass("slideDown");
+                    $("#unlock_window").addClass("slideDown");
+                    $("#unlock_window").removeClass("slideUp");
+
+                    modal.hide();
+                    window.setTimeout(function(){
+                        $("#unlock_window").hide();
+                    }, 150);
+                });
+            }else{
+                $("#memo_lock").html('<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"><path d="M226.67-636h380v-90.67q0-52.77-36.92-89.72-36.93-36.94-89.67-36.94-52.75 0-89.75 36.94-37 36.95-37 89.72h-66.66q0-80.33 56.57-136.83Q399.81-920 480.07-920q80.26 0 136.76 56.55 56.5 56.55 56.5 136.78V-636h60q27.5 0 47.09 19.58Q800-596.83 800-569.33v422.66q0 27.5-19.58 47.09Q760.83-80 733.33-80H226.67q-27.5 0-47.09-19.58Q160-119.17 160-146.67v-422.66q0-27.5 19.58-47.09Q199.17-636 226.67-636Zm0 489.33h506.66v-422.66H226.67v422.66ZM480.11-280q32.22 0 55.06-22.52Q558-325.04 558-356.67q0-31-22.95-55.16Q512.11-436 479.89-436t-55.06 24.17Q402-387.67 402-356.33q0 31.33 22.95 53.83 22.94 22.5 55.16 22.5ZM226.67-146.67v-422.66 422.66Z"/></svg>');
+                modal.children(".window").children(".inner").children("input").val(nijimemo_get_memo(memo_number,"title"));
+                modal.children(".window").children(".inner").children("textarea").val(nijimemo_get_memo(memo_number,"text"));
+                $(".window").addClass("slideUp");
+                $(".window").removeClass("slideDown");
+                $(".window").show();
+            }
 
             $('#overwrite').off('click'); 
             $("#overwrite").on('click', function() {
@@ -233,6 +364,68 @@
                     $(".modal").hide();
                 }, 150);
             });
+
+            $('#memo_lock').off('click'); 
+            $("#memo_lock").on('click', function() {
+                if(nijimemo_get_memo(memo_number,"lock") == true){
+                    nijimemo_overwrite_save(memo_number,$("#overwrite_title").val(),$("#overwrite_textarea").val());
+                    $("#memo_lock").html('<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"><path d="M226.67-636h380v-90.67q0-52.77-36.92-89.72-36.93-36.94-89.67-36.94-52.75 0-89.75 36.94-37 36.95-37 89.72h-66.66q0-80.33 56.57-136.83Q399.81-920 480.07-920q80.26 0 136.76 56.55 56.5 56.55 56.5 136.78V-636h60q27.5 0 47.09 19.58Q800-596.83 800-569.33v422.66q0 27.5-19.58 47.09Q760.83-80 733.33-80H226.67q-27.5 0-47.09-19.58Q160-119.17 160-146.67v-422.66q0-27.5 19.58-47.09Q199.17-636 226.67-636Zm0 489.33h506.66v-422.66H226.67v422.66ZM480.11-280q32.22 0 55.06-22.52Q558-325.04 558-356.67q0-31-22.95-55.16Q512.11-436 479.89-436t-55.06 24.17Q402-387.67 402-356.33q0 31.33 22.95 53.83 22.94 22.5 55.16 22.5ZM226.67-146.67v-422.66 422.66Z"/></svg>');
+                }else{
+                    $("#lock_window").addClass("slideUp");
+                    $("#lock_window").removeClass("slideDown");
+
+                    $(".window").addClass("slideDown");
+                    $(".window").removeClass("slideUp");
+                    window.setTimeout(function(){
+                        $(".window").hide();
+                    }, 150);
+
+                    $("#lock_window").show();
+
+
+                    $('#lock').off('click'); 
+                    $("#lock").on('click', function() {
+                        var passwd = $('#set_password').val();
+                        var lock_result = nijimemo_memolock(memo_number,$("#overwrite_title").val(),$("#overwrite_textarea").val(),passwd);
+                        if(lock_result == 0){
+                            $('#set_password').val("");
+
+                            $("#memo_lock").html('<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px"><path d="M226.67-80q-27.5 0-47.09-19.58Q160-119.17 160-146.67v-422.66q0-27.5 19.58-47.09Q199.17-636 226.67-636h60v-90.67q0-80.23 56.57-136.78T480.07-920q80.26 0 136.76 56.55 56.5 56.55 56.5 136.78V-636h60q27.5 0 47.09 19.58Q800-596.83 800-569.33v422.66q0 27.5-19.58 47.09Q760.83-80 733.33-80H226.67Zm0-66.67h506.66v-422.66H226.67v422.66ZM480.11-280q32.22 0 55.06-22.52Q558-325.04 558-356.67q0-31-22.95-55.16Q512.11-436 479.89-436t-55.06 24.17Q402-387.67 402-356.33q0 31.33 22.95 53.83 22.94 22.5 55.16 22.5ZM353.33-636h253.34v-90.67q0-52.77-36.92-89.72-36.93-36.94-89.67-36.94-52.75 0-89.75 36.94-37 36.95-37 89.72V-636ZM226.67-146.67v-422.66 422.66Z"/></svg>'); 
+
+                            $(".window").addClass("slideUp");
+                            $(".window").removeClass("slideDown");
+                            $("#lock_window").addClass("slideDown");
+                            $("#lock_window").removeClass("slideUp");
+
+                            $(".window").show();
+                            window.setTimeout(function(){
+                                $("#lock_window").hide();
+                            }, 150);
+                        }else if(lock_result == "password_mijikai"){
+                            $(".err").html("パスワードは1文字以上である必要があります。");
+                            $(".err").show();
+                            window.setTimeout(function(){
+                                $(".err").hide();
+                            }, 5000);
+                        }
+                    });
+
+
+                    $('#lock_cancel').off('click'); 
+                    $("#lock_cancel").on('click', function() {
+                        $(".window").addClass("slideUp");
+                        $(".window").removeClass("slideDown");
+                        $("#lock_window").addClass("slideDown");
+                        $("#lock_window").removeClass("slideUp");
+
+                        $(".window").show();
+                        window.setTimeout(function(){
+                            $("#lock_window").hide();
+                        }, 150);
+                    });
+                }
+                
+            });
         });
 
         $('.modal').off('click'); 
@@ -242,10 +435,16 @@
             $(".window").removeClass("slideUp");
             $(".qr_window").addClass("slideDown");
             $(".qr_window").removeClass("slideUp");
+            $("#lock_window").addClass("slideDown");
+            $("#lock_window").removeClass("slideUp");
+            $("#unlock_window").addClass("slideDown");
+            $("#unlock_window").removeClass("slideUp");
 
             window.setTimeout(function(){
                 $(".modal").hide();
                 $(".qr_window").hide();
+                $("#lock_window").hide();
+                $("#unlock_window").hide();
                 $(".window").hide();
             }, 150);
         });

@@ -132,7 +132,7 @@ main{
     padding-left: 8px;
     font-size: 20px;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 .rightbox .write div input:focus {
     outline: none;
@@ -150,7 +150,7 @@ main{
 
     font-size: 16px;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 .rightbox .write div textarea:focus {
     outline: none;
@@ -196,7 +196,7 @@ main{
     background-color: #F7F7F7;
     margin-top: 16px;
     border: solid 1px #DDD;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
     overflow: hidden;
 }
 .rightbox .read_zone .memo:hover{
@@ -303,7 +303,7 @@ main{
     padding-left: 8px;
     font-size: 20px;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 .modal .window .inner input:focus {
     outline: none;
@@ -321,7 +321,7 @@ main{
 
     font-size: 16px;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 .modal .window .inner textarea:focus {
     outline: none;
@@ -350,7 +350,31 @@ main{
     border-radius: 10px;
     font-family: "Inter", "BIZ UDPGothic", sans-serif;
     cursor: pointer;
-    transition: all 100ms ease-in-out;
+    transition: all 250ms ease-in-out;
+}
+.modal .Icons_button{
+    display: block;
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding: 0px;
+    height: 32px;
+    width: 32px;
+    color: #252525;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+.modal .Icons_button svg{
+    fill:#252525;
+    height: 28px;
+    width: 28px;
+    transition: all 250ms ease-in-out;
+}
+.modal .Icons_button svg:hover{
+    fill:#2bc8b1;
 }
 .modal .del:hover{
     background-color: #FF4848;
@@ -358,6 +382,20 @@ main{
     color: #FFFFFF;
 }
 .modal .window .inner .flexbox{
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    display: flex;
+    width: 100%;
+}
+.modal .window .inner .flexbox .left{
+    margin-top: 6px;
+    margin-left: 0px;
+    margin-right: auto;
+    display: flex;
+    width: fit-content;
+}
+.modal .window .inner .flexbox .right{
     margin-top: 6px;
     margin-left: auto;
     margin-right: 0px;
@@ -407,6 +445,72 @@ main{
     width: fit-content;
 }
 
+
+.modal .lock_window{
+    padding: 0px;
+    border-radius: 15px;
+    width: fit-content;
+    height: fit-content;
+    background-color: #FFFFFF;
+    max-width: 50%;
+    max-height: 75dvh;
+    position: absolute;
+    top: 45%;
+    right: 0;
+    bottom: 45%;
+    left: 0;
+    margin: auto;
+    box-shadow:0 0px 48px 0 rgba(0, 0, 0, .15);
+    overflow: hidden;
+    cursor: auto;
+}
+.modal .lock_window .inner{
+    margin: 24px;
+    height: calc(100% - 48px);
+}
+.modal .lock_window .inner h1{
+    font-size: 24px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
+.modal .lock_window .inner p{
+    line-height: 20px;
+    font-size: 16px;
+    color: #252525;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+}
+.modal .lock_window .inner input{
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    border: solid 1px #DDD;
+    width: calc(100% - 12px);
+    height: 32px;
+    padding-left: 8px;
+    font-size: 20px;
+    font-family: "Inter", "BIZ UDPGothic", sans-serif;
+    transition: all 250ms ease-in-out;
+}
+.modal .lock_window .inner input:focus {
+    outline: none;
+    border: 1px solid #9cd9ce;
+}
+.modal .lock_window .inner .flexbox{
+    margin-top: 12px;
+    margin-left: auto;
+    margin-right: 0px;
+    margin-bottom: -6px;
+    display: flex;
+    width: fit-content;
+}
+
+.errorbox{
+    position: fixed;
+    margin: 0px;
+    top:0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+}
 .err {
     position: absolute;
     animation: slideDown 5.0s ease-in-out forwards;
@@ -417,7 +521,7 @@ main{
     left: 0;
     width: fit-content;
     height: 24px;
-    z-index: 9999;
+    z-index: 99999;
     color: #FFFFFF;
     background-color: #FF4848;
     border-radius: 20px;
@@ -715,9 +819,9 @@ main{
         padding: 0px;
         border-radius: 20px 20px 0px 0px;
         width: 100%;
-        height:75dvh;
+        min-height: 85dvh;
         max-width: 100%;
-        top: 25dvh;
+        top: 15dvh;
         right: 0;
         bottom: 0%;
         left: 0;
@@ -754,8 +858,19 @@ main{
     }
 
     .modal .window .inner .flexbox{
-        margin-top: 0px;
+        display: block;
+        width: 100%;
+    }
+    .modal .window .inner .flexbox .left{
+        margin-top: 6px;
         margin-left: 0px;
+        margin-right: auto;
+        display: flex;
+        width: fit-content;
+    }
+    .modal .window .inner .flexbox .right{
+        margin-top: 0px;
+        margin-left: auto;
         margin-right: 0px;
         display: flex;
         justify-content: space-between;
@@ -801,6 +916,36 @@ main{
         height: 48px;
         width: calc((100% / 2) - 8px);
         border-radius: 10px;
+    }
+
+    .modal .lock_window{
+        padding: 0px;
+        border-radius: 20px 20px 0px 0px;
+        width: 100%;
+        min-height: 85dvh;
+        max-width: 100%;
+        top: 15dvh;
+        right: 0;
+        bottom: 0%;
+        left: 0;
+        margin: auto;
+    }
+    .modal .lock_window .inner .flexbox button{
+        margin: 0px;
+        margin-top: 32px;
+        font-size: 16px;
+        height: 48px;
+        width: calc((100% / 2) - 8px);
+        border-radius: 10px;
+    }
+
+    .modal .lock_window .inner .flexbox{
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        display: flex;
+        justify-content: space-between;
+        width: 50dvw;
     }
 
     .camera img{
@@ -965,6 +1110,35 @@ main{
     }
     .modal .qr_window{
         background-color: #FFFFFF;
+    }
+
+    .modal .Icons_button{
+        color: #EEE;
+    }
+    .modal .Icons_button svg{
+        fill:#EEE;
+    }
+    .modal .Icons_button svg:hover{
+        fill:#2bc8b1;
+    }
+
+    .modal .lock_window{
+        background-color: #101010;
+    }
+    .modal .lock_window .inner h1{
+        color: #EEE;
+    }
+    .modal .lock_window .inner p{
+        color: #EEE;
+    }
+    .modal .lock_window .inner input{
+        color:#EEE;
+        background-color: #0A0A0A;
+        border: solid 1px #252525;
+    }
+    .modal .lock_window .inner input:focus {
+        outline: none;
+        border: 1px solid #9cd9ce;
     }
     
     .start_read button{
