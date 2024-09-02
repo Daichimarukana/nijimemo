@@ -314,7 +314,7 @@ main{
     border-radius: 10px;
     border: solid 1px #DDD;
     width: calc(100% - 12px);
-    height: 76%;
+    height: calc(100% - 150px);
     padding-left: 8px;
     max-height: 76%;
     resize: none;
